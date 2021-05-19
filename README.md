@@ -144,6 +144,21 @@ Default: `See More`
 }}
 ```
 
+### `seeMoreA11yText`
+
+This component should have optional support for aria-label in the situation where text alone is not enough to convey context of button to users, hence this attribute allows you to set the aria-label for the 'See More' button. By default this attribute is not used.
+
+Default: `false`
+
+```handlebars
+{{line-clamp
+  text="A really long text to truncate"
+  showLessButton=false
+  seeMoreText="See more"
+  seeMoreA11yText="A button which expands the content of this text"
+}}
+```
+
 ### `seeLessText`
 
 This component should work in any language, hence this attribute allows you to set the text for the 'See Less' button
@@ -156,6 +171,22 @@ Default: `See Less`
   showLessButton=false
   seeMoreText="Read More"
   seeLessText="Read Less"
+}}
+```
+
+### `seeLessA11yText`
+
+This component should have optional support for aria-label in the situation where text alone is not enough to convey context of button to users, hence this attribute allows you to set the aria-label for the 'See Less' button. By default this attribute is not used.
+
+Default: `false`
+
+```handlebars
+{{line-clamp
+  text="A really long text to truncate"
+  showLessButton=false
+  seeMoreText="Read More"
+  seeLessText="Read Less"
+  seeLessA11yText="A button which unexpands the content of this text"
 }}
 ```
 
