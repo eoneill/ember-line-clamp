@@ -356,6 +356,8 @@ module('Integration | Component | line clamp', function(hooks) {
       'see more button contains expected text'
     );
 
+    assert.dom(seeMoreButton).doesNotHaveAttribute('aria-label', 'see more button does not set aria-label by default');
+
     assert.dom(element).containsText('... Read More');
 
     await click(seeMoreButton);
@@ -372,6 +374,74 @@ module('Integration | Component | line clamp', function(hooks) {
       'Read Less',
       'see less button contains expected text'
     );
+
+    assert.dom(seeLessButton).doesNotHaveAttribute('aria-label', 'see less button does not set aria-label by default');
+
+    assert.equal(
+      element.innerText.trim(),
+      'helloworld helloworld helloworld helloworld helloworld helloworld helloworld helloworld Read Less'
+    );
+  });
+
+  test('seeMoreA11yText and seeLessA11yText attributes work as expected', async function(assert) {
+    await render(hbs`<div style="width: 300px; font-size: 16px; font-family: sans-serif;">
+      {{line-clamp
+        text="helloworld helloworld helloworld helloworld helloworld helloworld helloworld helloworld"
+        seeMoreText="Read More"
+        seeMoreA11yText="A button which expands the content of this text"
+        seeLessText="Read Less"
+        seeLessA11yText="A button which unexpands the content of this text"
+      }}
+    </div>`);
+
+    const element = this.element;
+    const lines = Array.from(element.querySelectorAll('.lt-line-clamp__line'));
+    const lastLine = lines[lines.length - 1];
+    const lastLineChildren = lastLine.children;
+    const ellipsisElement = lastLineChildren[0];
+    const seeMoreButton = ellipsisElement.children[1];
+
+    assert.ok(
+      element,
+      'line clamp target exists'
+    );
+
+    assert.ok(
+      ellipsisElement,
+      'last line child is the ellipsis element and it exists'
+    );
+
+    assert.ok(
+      seeMoreButton,
+      'see more button exists'
+    );
+
+    assert.equal(
+      seeMoreButton.innerText,
+      'Read More',
+      'see more button contains expected text'
+    );
+
+    assert.dom(seeMoreButton).hasAttribute('aria-label', 'A button which expands the content of this text', 'see more button sets aria-label if provided');
+
+    assert.dom(element).containsText('... Read More');
+
+    await click(seeMoreButton);
+
+    const seeLessButton = element.querySelectorAll('.lt-line-clamp__less')[0];
+
+    assert.ok(
+      seeLessButton,
+      'see less button exists'
+    );
+
+    assert.equal(
+      seeLessButton.innerText,
+      'Read Less',
+      'see less button contains expected text'
+    );
+
+    assert.dom(seeLessButton).hasAttribute('aria-label', 'A button which unexpands the content of this text', 'see less button sets aria-label if provided');
 
     assert.equal(
       element.innerText.trim(),
